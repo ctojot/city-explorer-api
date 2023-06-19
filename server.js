@@ -47,14 +47,14 @@ app.get('/hello', (request, response) => {
 app.get('/weather', (request, response, next) => {
   try {
     // TODO: GRAB THE QUERY FROM THE REQUEST.QUERY OBJECT
-    // let queriedLat = request.query.lat;
-    // let queriedLon = request.query.lon;
+    let queriedLat = request.query.lat;
+    let queriedLon = request.query.lon;
     let queriedSearchQuery = request.query.searchQuery;
 
     // TODO: USE THAT QUERY TO FIND A CITY THAT MATCHES
     let foundCity = data.find(element => (
-    //   element.lat === queriedLat &&
-    //   element.lon === queriedLon &&
+      element.lat === queriedLat &&
+      element.lon === queriedLon &&
       element.city === queriedSearchQuery
     ));
     // USING CLASS TO GROOM DATA
