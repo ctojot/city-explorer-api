@@ -27,12 +27,13 @@ app.get('/hello', (request, response) => {
   response.status(200).send(`Hello ${userFirstName} ${userLastName}`);
 });
 
+
 app.get('/weather', weatherModularize);
 app.get('/movies', moviesModularize);
 
 app.get('*', (request, response) => {
   response.status(404).send('Sorry, page not found');
-});
+
 
 
 // *** ERROR HANDLING - PLUG AND PLAY CODE FROM EXPRESS DOCS ***
