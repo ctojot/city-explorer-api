@@ -7,8 +7,14 @@ async function weatherModularize (request, response, next){
     let lon = request.query.lon;
     let weatherURL = `http://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.REACT_WEATHER_API}&lat=${lat}&lon=${lon}`;
     let weatherDataFromAxios = await axios.get(weatherURL);
-    let cityWeather = weatherDataFromAxios.data.data.map(cityObj => new Forecast(cityObj));
-    response.status(200).send(cityWeather);
+    if (weatherDataFromAxios){
+      let forecastWeather = weatherDataFromAxios.data.data.map(element => {
+        return new Forecast(element);
+      });
+      response.status(200).send(forecastWeather);
+    } else {
+      response.status(500).send('RESULTS NOT FOUND');
+    }
   } catch (error) {
     next(error);
   }

@@ -1,13 +1,33 @@
 'use strict';
 const axios = require('axios');
 
+let cache = {};
+
 async function moviesModularize(request, response, next) {
   try {
-    let keywordFromFront = request.query.searchQuery;
-    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_MOVIE_API}&query=${keywordFromFront}`;
-    let dataFromAxios = await axios.get(url);
-    let dataToSend = dataFromAxios.data.results.map(movieObj => new Movie(movieObj));
-    response.status(200).send(dataToSend);
+    let searchedMovie = request.query.searchQuery;
+    let key = `${searchedMovie}-Movies`;
+
+    if (cache[key] && (Date.now() - cache[key].timestamp < 60000)){
+      console.log('Cache:', cache);
+
+      response.status(200).send(cache[key].data);
+
+    } else {
+      console.log('No item in cache');
+
+      let movieURL = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_MOVIE_API_KEY}&query=${searchedMovie}`;
+      let dataFromAxios = await axios.get(movieURL);
+      let dataToSend = dataFromAxios.data.results.map(movieObj => new Movie (movieObj));
+
+      cache[key] = {
+        timestamp: Date.now(),
+        data: dataToSend
+      };
+
+      response.status(200).send(dataToSend);
+
+    }
   } catch (error) {
     next(error);
   }
