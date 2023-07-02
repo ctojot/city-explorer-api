@@ -19,13 +19,6 @@ app.get('/', (request, response) => {
   response.status(200).send('Welcome to my server!');
 });
 
-app.get('/hello', (request, response) => {
-  console.log(request.query);
-  let userFirstName = request.query.firstname;
-  let userLastName = request.query.lastname;
-
-  response.status(200).send(`Hello ${userFirstName} ${userLastName}`);
-});
 
 app.get('/weather', weatherModularize);
 app.get('/movies', moviesModularize);
@@ -33,7 +26,6 @@ app.get('/movies', moviesModularize);
 app.get('*', (request, response) => {
   response.status(404).send('Sorry, page not found');
 });
-
 
 // *** ERROR HANDLING - PLUG AND PLAY CODE FROM EXPRESS DOCS ***
 app.use((error, request, response, next) => {
